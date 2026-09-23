@@ -22,7 +22,36 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
+const FALLBACK_ICON = "icon.png";
+
 let title;
+
+function notificationOptions(songTitle, artist, iconUrl) {
+  return {
+    type: "basic",
+    title: songTitle,
+    message: artist,
+    iconUrl,
+  };
+}
+
+// chrome.notifications rejects remote image URLs. A bad data URL must not
+// swallow the alert, so fall back to the packaged icon.
+function showNotification(songTitle, artist, iconUrl) {
+  chrome.notifications.create(notificationOptions(songTitle, artist, iconUrl), () => {
+    const err = chrome.runtime.lastError;
+    if (err && iconUrl !== FALLBACK_ICON) {
+      chrome.notifications.create(notificationOptions(songTitle, artist, FALLBACK_ICON));
+    }
+  });
+}
+
+function iconUrlFor(message) {
+  const cover = message.coverDataUrl;
+  if (typeof cover === "string" && cover.startsWith("data:image/")) return cover;
+  return FALLBACK_ICON;
+}
+
 // Listen for messages from the content script
 chrome.runtime.onMessage.addListener(message => {
   // Check if the message is a song change event
@@ -30,13 +59,7 @@ chrome.runtime.onMessage.addListener(message => {
     // Prevent multiple notifications if multiple tabs are open
     if (title !== message.title) {
       title = message.title;
-      // Create a notification with the song title and artist
-      chrome.notifications.create({
-        type: "basic",
-        title: message.title,
-        message: message.artist,
-        iconUrl: "icon.png",
-      });
+      showNotification(message.title, message.artist, iconUrlFor(message));
     }
   }
 });
