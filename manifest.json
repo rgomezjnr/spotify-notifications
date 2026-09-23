@@ -1,0 +1,24 @@
+{
+   "author": "ViaxCo",
+   "background": {
+      "service_worker": "background.js"
+   },
+   "content_scripts": [ {
+      "js": [ "content.js" ],
+      "matches": [ "https://open.spotify.com/*" ]
+   } ],
+   "description": "Displays notifications when song changes on Spotify.",
+   "host_permissions": [ "https://open.spotify.com/*" ],
+   "icons": {
+      "128": "icon.png",
+      "16": "icon-16.png",
+      "32": "icon-32.png",
+      "48": "icon-48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjKjz1C6F72bOPs9oKbuHcs/FmRRP0VLetbJ3jbDBe5Xbbe+OlK+9XhEdcHj5T7qwE6HzGi5YG8L3X2QamAbe8kbWvKZ411iloQ87zFTvRV6TpL7lL8s3EszlEjq0GWQRxn2VyqK8d1siSNK0gzmH8Me7wj4QY5xgMDkUTQ/iLeh87YaKN118xJIvJ4s+uHGIqrEdA0CfmWokcl94xhsZAB0Ka7gP3wtOuAGx3H81ImByZGvfMmUtONFuJf+sHrh1yl6ClqPoBSgInSG1DZdujdE8x22qNUw+hKx7lrhh+OQnozNnGVZN3sk+5nvpiOfJl3bqRZDgDfG7KChlTaRr6QIDAQAB",
+   "manifest_version": 3,
+   "name": "Spotify Notifications",
+   "permissions": [ "notifications", "tabs", "scripting" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0.0"
+}
